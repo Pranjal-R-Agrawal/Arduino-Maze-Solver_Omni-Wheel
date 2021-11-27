@@ -1,5 +1,9 @@
 void lineFollowing () {
-    lineFollowing (0.05, 0.0, 70, 40);
+    lineFollowing (70);
+}
+
+void lineFollowing (int spd) {
+    lineFollowing (0.1, 0.07, spd, 40);
 }
 
 double error = 0, P = 0, D = 0, previousError = 0, PID = 0;

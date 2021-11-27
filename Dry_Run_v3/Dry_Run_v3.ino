@@ -35,7 +35,7 @@ int sBottom, sLeft, sCenter, sRight;
 
 bool debug = false, adjustSpeed = true, scaleSensors = false;
 
-double optimumVoltage = 7.7, currentVoltage = 8.18, constant = 1.35;
+double optimumVoltage = 7.7, currentVoltage = 8.03, constant = 1.35;
 
 void setup() {
     if (debug) Serial.begin (9600);
@@ -69,10 +69,10 @@ void loop() {
         left = onLine(wTop) || onLine (wBottom) || onLine (wCenter) || onLine (wLeft);
         straight = onLine(nTop) || onLine (nRight) || onLine (wCenter) || onLine (wLeft);
         right = onLine(eTop) || onLine (eBottom) || onLine (eCenter) || onLine (eRight);
-        lineFollowing (0.05, 0.0, 70, 40);
+        lineFollowing (0.1, 0.0, 70, 40);
     }
     timer = millis ();
-    while ((millis () - timer) <= 300) {
+    while ((millis () - timer) <= 75) {
         digitalWrite (redled, HIGH);
         if (onLine(wTop) || onLine (wBottom) || onLine (wCenter) || onLine (wLeft)) left = true;
         if (onLine(nTop) || onLine (nRight) || onLine (wCenter) || onLine (wLeft)) straight = true;
@@ -94,8 +94,9 @@ void loop() {
     decelerate (30, 2);
     brake (200);
     timer = millis ();
-    while ((millis () - timer) <= 400) {
-        lineFollowing (0.05, 0.0, 50, 40);
+    while ((millis () - timer) <= 500) {
+        lineFollowing (0.1, 0.0, 70, 40);
     }
     digitalWrite (redled, LOW);
+    left = false; straight = true; right = false;
 }

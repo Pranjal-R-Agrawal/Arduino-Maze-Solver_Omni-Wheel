@@ -35,7 +35,7 @@ int sBottom, sLeft, sCenter, sRight;
 
 bool debug = false, adjustSpeed = true, scaleSensors = false;
 
-double optimumVoltage = 7.7, currentVoltage = 8.03, constant = 1.35;
+double optimumVoltage = 7.7, currentVoltage = 8.1, constant = 1.35;
 
 void setup() {
     if (debug) Serial.begin (9600);
@@ -62,23 +62,46 @@ void setup() {
     delay (500);
 }
 
-bool left = false, straight = true, right = false;
+bool left = false, straight = true, right = false, back = true;
 long timer;
 void loop() {
+
     while (!left && straight && !right) {
         left = onLine(wTop) || onLine (wBottom) || onLine (wCenter) || onLine (wLeft);
-        straight = onLine(nTop) || onLine (nRight) || onLine (wCenter) || onLine (wLeft);
+        straight = onLine(nTop) || onLine (nRight) || onLine (nCenter) || onLine (nLeft);
         right = onLine(eTop) || onLine (eBottom) || onLine (eCenter) || onLine (eRight);
-        lineFollowing (0.1, 0.0, 70, 40);
+        lineFollowing ();
     }
+
+    digitalWrite (redled, HIGH);
+
     timer = millis ();
-    while ((millis () - timer) <= 75) {
-        digitalWrite (redled, HIGH);
-        if (onLine(wTop) || onLine (wBottom) || onLine (wCenter) || onLine (wLeft)) left = true;
-        if (onLine(nTop) || onLine (nRight) || onLine (wCenter) || onLine (wLeft)) straight = true;
-        if (right = onLine(eTop) || onLine (eBottom) || onLine (eCenter) || onLine (eRight)) right = true;
-        omni (30);
+    if (left || right) {
+        while ((millis () - timer) <= 75) {
+            if (onLine(wTop) || onLine (wBottom) || onLine (wCenter) || onLine (wLeft)) left = true;
+            if (onLine(nTop) || onLine (nRight) || onLine (nCenter) || onLine (nLeft)) straight = true;
+            if (right = onLine(eTop) || onLine (eBottom) || onLine (eCenter) || onLine (eRight)) right = true;
+            omni (30);
+        }
     }
+    else if (!straight) {
+        while ((millis () - timer) <= 50) {
+            if (onLine(wTop) || onLine (wBottom) || onLine (wCenter) || onLine (wLeft)) left = true;
+            if (right = onLine(eTop) || onLine (eBottom) || onLine (eCenter) || onLine (eRight)) right = true;
+            back = onLine(sBottom) || onLine (sRight) || onLine (sCenter) || onLine (sLeft);
+            omni (35);
+            if (!back) break;
+            //if (left || right || !back) break;
+        }
+        if (!back) {
+            omni (uDir, 30);
+            delay (30);
+        }
+    }
+
+    decelerate (30, 2);
+    brake (200);
+
     if (left) {
         changeDir (1);
     }
@@ -91,12 +114,15 @@ void loop() {
     else {
         changeDir (2);
     }
-    decelerate (30, 2);
-    brake (200);
+
     timer = millis ();
+    double spd = 20;
     while ((millis () - timer) <= 500) {
-        lineFollowing (0.1, 0.0, 70, 40);
+        if (spd < 70) spd += 0.1;
+        lineFollowing ((int)spd);
     }
+
     digitalWrite (redled, LOW);
     left = false; straight = true; right = false;
+
 }

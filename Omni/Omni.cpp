@@ -39,7 +39,6 @@ Omni :: Omni (bool adjustSpeed, double optimumVoltage, double currentVoltage, do
 }
 
 void Omni :: motors (int spd1, int spd2, int spd3, int spd4) {
-
     digitalWrite(STBY, HIGH);
 
     // motor 1 (top right)
@@ -61,11 +60,10 @@ void Omni :: motors (int spd1, int spd2, int spd3, int spd4) {
     analogWrite(pwm4, _adjust (abs (spd4)));
     digitalWrite(m4a, (spd4 >= 0) ? HIGH : LOW);
     digitalWrite(m4b, (spd4 >= 0) ? LOW : HIGH);
-
 }
 
 void Omni :: goStraight (int spd) {
-    goStraight (cDir, spd);
+    goStraight (_cDir, spd);
 }
 
 void Omni :: goStraight (int dir, int spd) {
@@ -73,6 +71,19 @@ void Omni :: goStraight (int dir, int spd) {
     else if (dir == 1) motors (spd, -spd, spd, -spd);
     else if (dir == 2) motors (-spd, -spd, -spd, -spd);
     else if (dir == 3) motors (-spd, spd, -spd, spd);
+}
+
+void Omni :: move (int spdL, int spdR) {
+    if (_cDir == 0) motors (spdR, spdR, spdL, spdL);
+    else if (_cDir == 1) motors (spdR, -spdL, spdL, -spdR);
+    else if (_cDir == 2) motors (-spdL, -spdL, -spdR, -spdR);
+    else if (_cDir == 3) motors (-spdL, spdR, -spdR, spdL);
+}
+
+void Omni :: rotate (char dir, int spd) {
+    int spdL = (dir == 'l')? (-spd) : spd;
+    int spdR = -spdL;
+    move (spdL, spdR);
 }
 
 int Omni :: _adjust (double spd) {
@@ -84,17 +95,15 @@ int Omni :: _adjust (double spd) {
 }
 
 void Omni :: changeDir (int change) {
-    cDir = _updateDir (cDir, change);
-    lDir = _updateDir (cDir, +1);
-    rDir = _updateDir (cDir, -1);
-    uDir = _updateDir (cDir, -2);
+    _cDir = _updateDir (_cDir, change);
+    _rDir = _updateDir (_cDir, -1);
+    _lDir = _updateDir (_cDir, +1);
+    _uDir = _updateDir (_cDir, -2);
 
-    nTop = cDir * 4; nRight = nTop + 1; nCenter = nTop + 2; nLeft = nTop + 3;
-    eRight = rDir * 4; eBottom = eRight + 1; eCenter = eRight + 2; eTop = eRight + 3;
-    wLeft = lDir * 4; wTop = wLeft + 1; wCenter = wLeft + 2; wBottom = wLeft + 3;
-    sBottom = uDir * 4; sLeft = sBottom + 1; sCenter = sBottom + 2; sRight = sBottom + 3;
-
-    //if (debug) printDir ();
+    nTop = _cDir * 4; nRight = nTop + 1; nCenter = nTop + 2; nLeft = nTop + 3;
+    eRight = _rDir * 4; eBottom = eRight + 1; eCenter = eRight + 2; eTop = eRight + 3;
+    wLeft = _lDir * 4; wTop = wLeft + 1; wCenter = wLeft + 2; wBottom = wLeft + 3;
+    sBottom = +uDir * 4; sLeft = sBottom + 1; sCenter = sBottom + 2; sRight = sBottom + 3;
 }
 
 int Omni :: _updateDir (int dir, int change) {
@@ -104,16 +113,20 @@ int Omni :: _updateDir (int dir, int change) {
 }
 
 void Omni :: setDir (int dir) {
-    cDir = dir;
+    _cDir = dir;
     changeDir (0);
 }
 
-void Omni :: decelerate (int start, int decrement) {
-    for (int spd = start; spd >= 0; spd -= decrement) {
-        goStraight (spd);
-        if (spd < decrement) spd = decrement;
-    }
-    goStraight (0);
+int Omni :: getDir (char dir) {
+    if (dir == 'c') return (_cDir);
+    else if (dir == 'r') return (_rDir);
+    else if (dir == 'l') return (_lDir);
+    else if (dir == 'u') return (_uDir);
+}
+
+void Omni :: decelerate (int initial, int final, int decrement) {
+    for (int spd = initial; spd >= final; spd -= decrement) goStraight (spd);
+    goStraight (final);
 }
 
 void Omni :: brake (int x) {

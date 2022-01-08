@@ -1,7 +1,26 @@
+#######################################
+# Classes and Datatypes (KEYWORD1)
+#######################################
+
 Omni	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
 motors	KEYWORD2
 goStraight	KEYWORD2
 changeDir	KEYWORD2
 setDir	KEYWORD2
 decelerate	KEYWORD2
 brake	KEYWORD2
+move	KEYWORD2
+rotate	KEYWORD2
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+#######################################
+# Constants (LITERAL1)
+#######################################

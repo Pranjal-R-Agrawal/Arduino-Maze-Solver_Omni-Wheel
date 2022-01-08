@@ -63,14 +63,18 @@ void Omni :: motors (int spd1, int spd2, int spd3, int spd4) {
 }
 
 void Omni :: goStraight (int spd) {
-    goStraight (_cDir, spd);
+    goAbsDir (_cDir, spd);
 }
 
-void Omni :: goStraight (int dir, int spd) {
+void Omni :: goAbsDir (int dir, int spd) {
     if (dir == 0) motors (spd, spd, spd, spd);
     else if (dir == 1) motors (spd, -spd, spd, -spd);
     else if (dir == 2) motors (-spd, -spd, -spd, -spd);
     else if (dir == 3) motors (-spd, spd, -spd, spd);
+}
+
+void Omni :: goRelDir (int dir, int spd) {
+    goAbsDir (_updateDir (_cDir, dir), spd);
 }
 
 void Omni :: move (int spdL, int spdR) {
@@ -103,7 +107,7 @@ void Omni :: changeDir (int change) {
     nTop = _cDir * 4; nRight = nTop + 1; nCenter = nTop + 2; nLeft = nTop + 3;
     eRight = _rDir * 4; eBottom = eRight + 1; eCenter = eRight + 2; eTop = eRight + 3;
     wLeft = _lDir * 4; wTop = wLeft + 1; wCenter = wLeft + 2; wBottom = wLeft + 3;
-    sBottom = +uDir * 4; sLeft = sBottom + 1; sCenter = sBottom + 2; sRight = sBottom + 3;
+    sBottom = _uDir * 4; sLeft = sBottom + 1; sCenter = sBottom + 2; sRight = sBottom + 3;
 }
 
 int Omni :: _updateDir (int dir, int change) {

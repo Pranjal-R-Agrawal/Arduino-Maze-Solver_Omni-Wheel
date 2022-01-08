@@ -10,12 +10,15 @@ Omni	KEYWORD1
 
 motors	KEYWORD2
 goStraight	KEYWORD2
+goAbsDir	KEYWORD2
+goRelDir	KEYWORD2
+move	KEYWORD2
+rotate	KEYWORD2
 changeDir	KEYWORD2
 setDir	KEYWORD2
 decelerate	KEYWORD2
 brake	KEYWORD2
-move	KEYWORD2
-rotate	KEYWORD2
+getDir	KEYWORD2
 
 #######################################
 # Instances (KEYWORD2)

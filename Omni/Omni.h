@@ -14,7 +14,7 @@ class Omni {
         void rotate (char dir, int spd);
         void changeDir (int change);
         void setDir (int dir);
-        void decelerate (int initial, int final, int decrement);
+        void decelerate (int initialSpeed, int finalSpeed, int decrement);
         void brake (int x);
 
         int getDir (char dir);

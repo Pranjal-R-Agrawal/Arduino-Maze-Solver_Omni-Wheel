@@ -124,9 +124,9 @@ int Omni :: getDir (char dir) {
     else if (dir == 'u') return (_uDir);
 }
 
-void Omni :: decelerate (int initial, int final, int decrement) {
-    for (int spd = initial; spd >= final; spd -= decrement) goStraight (spd);
-    goStraight (final);
+void Omni :: decelerate (int initialSpeed, int finalSpeed, int decrement) {
+    for (int spd = initialSpeed; spd >= finalSpeed; spd -= decrement) goStraight (spd);
+    goStraight (finalSpeed);
 }
 
 void Omni :: brake (int x) {

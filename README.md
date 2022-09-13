@@ -1,4 +1,4 @@
-# Arduino-Maze-Solver-v2
+# Arduino-Maze-Solver_Omni-Wheels
 
 This is the code for a maze solving robot. The robot uses the left hand rule.
 
@@ -9,3 +9,8 @@ Important Components -
 * IR Sensor x 16
 * 600 RPM N20 motor x 4
 * Turnigy 460 mah 2s 20C - 40C LiPo battery x 1
+
+
+Test Run - https://www.instagram.com/p/CWwKlgioEkP/?utm_source=ig_web_copy_link
+
+(Abandoned Project)

@@ -11,6 +11,6 @@ Important Components -
 * Turnigy 460 mah 2s 20C - 40C LiPo battery x 1
 
 
-Test Run - https://www.instagram.com/p/CWwKlgioEkP/?utm_source=ig_web_copy_link
+Test Run - https://www.instagram.com/p/CWwKlgioEkP
 
 (Abandoned Project)
